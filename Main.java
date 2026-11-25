@@ -26,7 +26,7 @@ public class Main {
             try {
                 handle(start);
             } catch (Exception e) {
-                send(500, "Internal Server Error", error("Server error"));
+                try { send(500, "Internal Server Error", error("Server error")); } catch (IOException ex) {}
             }
         }
     }
@@ -155,7 +155,7 @@ public class Main {
         return "{\"error\":\"" + message + "\"}";
     }
 
-    private static void send(int code, String status, String json) {
+    private static void send(int code, String status, String json) throws IOException {
         byte[] body = json.getBytes(StandardCharsets.UTF_8);
         String head = "HTTP/1.1 " + code + " " + status + "\r\n"
                 + "Content-Type: application/json; charset=utf-8\r\n"
